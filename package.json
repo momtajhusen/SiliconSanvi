@@ -1,0 +1,19 @@
+{
+  "name": "silicon",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix website",
+    "dev": "npm run dev:all",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:website": "npm run dev --prefix website",
+    "dev:all": "concurrently -n backend,website -c magenta.bold,cyan.bold --kill-others-on-fail \"npm:start:backend\" \"npm:start:website\"",
+    "start:backend": "npm run dev --prefix backend",
+    "start:website": "wait-on tcp:5050 -t 60000 && npm run dev --prefix website",
+    "build": "npm run build --prefix website",
+    "stop": "lsof -ti:5050,5173 | xargs kill -9 2>/dev/null || true"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.5",
+    "wait-on": "^9.5.1"
+  }
+}

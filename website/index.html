@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+    <meta name="theme-color" content="#0b1f4b" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('silicon-theme') || 'light';
+          var p = location.pathname;
+          var marketing =
+            p === '/' ||
+            p === '/about' ||
+            p === '/silicon' ||
+            p === '/sanvi' ||
+            p === '/courses' ||
+            p === '/cctv' ||
+            p === '/products' ||
+            p === '/contact' ||
+            p === '/admission' ||
+            p.indexOf('/auth') === 0;
+          if (t === 'dark' && !marketing) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <meta name="description" content="Silicon Computer Institute — computer courses (Basic, MS Office, Tally with GST, DCA/ADCA, Web Development, Python). Sanvi Computer and Traders — computers, parts & accessories and CCTV camera installation." />
+    <title>Silicon Computer Institute &amp; Sanvi Computer and Traders</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

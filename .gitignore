@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.zip
+.env
+.mongo-data/
+.mongo-logs/
+.DS_Store
+backend/uploads/
