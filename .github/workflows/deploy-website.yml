@@ -8,16 +8,15 @@ on:
       - '.github/workflows/deploy-website.yml'
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 concurrency:
   group: deploy-website
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
     steps:
       - uses: actions/checkout@v4
 
@@ -33,10 +32,16 @@ jobs:
       - run: npm run build
         working-directory: website
 
-      # Hostinger's Git deployment pulls this branch into public_html, so keep its history (no force push).
-      - uses: peaceiris/actions-gh-pages@v4
+      - name: Upload to Hostinger (FTP)
+        if: env.FTP_SERVER != ''
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: website/dist
-          publish_branch: hostinger
-          commit_message: 'Deploy website'
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: website/dist/
+          server-dir: ${{ vars.FTP_SERVER_DIR || 'public_html/' }}
+
+      - name: FTP secrets missing
+        if: env.FTP_SERVER == ''
+        run: echo "::warning::Set FTP_SERVER, FTP_USERNAME and FTP_PASSWORD repo secrets to upload the build to Hostinger."
