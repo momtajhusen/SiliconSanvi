@@ -1,0 +1,33 @@
+name: Deploy backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /home/ubuntu/Momtaj_Projects/SiliconSanvi
+            git pull --ff-only origin main
+            cd backend
+            npm ci --omit=dev
+            pm2 restart silicon-backend
+            sleep 5
+            curl -fsS -o /dev/null http://127.0.0.1:5060/api/public/company
+            echo "Backend deployed and healthy"
